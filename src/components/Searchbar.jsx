@@ -3,10 +3,10 @@ import { Search } from 'lucide-react';
 
 const Searchbar = () => {
   return (
-    <div className='flex justify-center'>
-      <div className='flex gap-20  items-center w-fit justify-center border rounded-full px-4 py-2 shadow-md'>
+    <div className='flex justify-center mt-6'>
+      <div className='flex gap-20  items-center w-[850px] justify-center border rounded-full  shadow-md'>
 
-      <div>
+      <div className="flex-1 px-8 py-3">
         <h4 className='font-semibold'>Where</h4>
         <p className='text-gray-500'>Search destinations</p>
       </div>
