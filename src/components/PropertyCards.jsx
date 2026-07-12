@@ -1,15 +1,24 @@
 import { Star } from 'lucide-react';
 import {Heart} from 'lucide-react';
+import { useState } from 'react';
 
 const PropertyCards = ({image,location,price,rating,distance,dates}) => {
+  const [liked, setLiked] = useState(false)
+ 
+   const change=()=> {
+     setLiked(prevLiked => !prevLiked)
+  }
+
   return (
+
     <div className=' relative w-full p-4 hover:scale-105 transition duration-300 cursor-pointer'>
   <img
     className="w-full h-60 object-cover rounded-xl"
     src={image}
     alt={location}
   />
-  <button className='absolute top-5 right-6 cursor-pointer'><Heart className='text-white ' size={24}/></button>
+  
+  <button  onClick={change} className="absolute top-5 right-6 p-1 rounded-full bg-black/20 hover:bg-black/40 transition"><Heart className={liked?"text-red-500":"text-white"} size={24} fill={liked?"red":"none"} /></button>
 
   <div className="flex justify-between mt-2">
     <h2 className="font-semibold">{location}</h2>
