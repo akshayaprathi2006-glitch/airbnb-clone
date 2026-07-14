@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Navtabs from '../components/Navtabs'
 import Searchbar from '../components/Searchbar'
@@ -6,16 +6,27 @@ import PropertyCards from '../components/PropertyCards'
 import properties from '../data/properties'
 import Categories from '../components/Categories'
 
+
 const Homepage = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All")
+ const filteredProperties =
+  selectedCategory === "All"
+    ? properties
+    : properties.filter(
+        (property) => property.category === selectedCategory
+      );
   return (
     <div>
      <Navbar/>
      <Navtabs/>
      <Searchbar/>
-     <Categories/>
+     <Categories
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+    />
      <div className='grid grid-cols-4 gap-6 p-6'>
       {
-  properties.map((property) => (
+  filteredProperties.map((property) => (
     <PropertyCards
       key={property.id}
       image={property.image}

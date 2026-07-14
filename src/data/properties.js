@@ -6,6 +6,7 @@ const properties = [
     location: "Goa, India",
     distance: "500 km away",
     dates: "1-6 Jul",
+    category:"Beach",
     price: 4500,
     rating: 4.9,
     image: goa
@@ -15,6 +16,7 @@ const properties = [
     location: "Manali, India",
     distance: "300 km away",
     dates: "10-15 Jul",
+    category:"Mountains",
     price: 3500,
     rating: 4.8,
     image: manali
