@@ -8,11 +8,14 @@ import React from 'react'
         onClick={() => setSelectedCategory("All")} > 🌍 All </div>
       <div
       onClick={()=>{setSelectedCategory("Beach")}}>🏖 Beach</div>
-      <div>🏕 Camping</div>
+      <div
+      onClick={()=>{setSelectedCategory("Camping")}}>🏕 Camping</div>
       <div
       onClick={()=>{setSelectedCategory("Mountains")}}>🏔 Mountains</div>
-      <div>🏡 Cabins</div>
-      <div>🌴 Tropical</div>
+      <div
+      onClick={()=>{setSelectedCategory("Cabins")}}>🏡 Cabins</div>
+      <div
+      onClick={()=>{setSelectedCategory("Tropical")}}>🌴 Tropical</div>
     </div>
   );
 };
