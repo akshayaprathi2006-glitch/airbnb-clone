@@ -1,17 +1,21 @@
 import { Star } from 'lucide-react';
 import {Heart} from 'lucide-react';
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 
-const PropertyCards = ({image,location,price,rating,distance,dates}) => {
+const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
   const [liked, setLiked] = useState(false)
  
    const change=()=> {
      setLiked(prevLiked => !prevLiked)
   }
 
-  return (
 
-    <div className=' relative w-full p-4 hover:scale-105 transition duration-300 cursor-pointer'>
+
+
+  return (
+    <Link to={`/property/${id}`}>
+       <div className=' relative w-full p-4 hover:scale-105 transition duration-300 cursor-pointer'>
   <img
     className="w-full h-60 object-cover rounded-xl"
     src={image}
@@ -33,6 +37,8 @@ const PropertyCards = ({image,location,price,rating,distance,dates}) => {
   <p className="text-gray-500">{distance}</p>
 <p className="text-gray-500">{dates}</p>
 </div>
+    </Link>
+   
 )}
 
 export default PropertyCards

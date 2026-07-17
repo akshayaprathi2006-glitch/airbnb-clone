@@ -29,6 +29,7 @@ const Homepage = () => {
   filteredProperties.map((property) => (
     <PropertyCards
       key={property.id}
+      id={property.id}
       image={property.image}
       location={property.location}
       price={property.price}
