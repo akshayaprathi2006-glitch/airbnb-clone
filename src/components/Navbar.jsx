@@ -2,6 +2,7 @@ import React from 'react'
 import {Globe} from 'lucide-react'
 import {Menu} from 'lucide-react'
 import logo from "../assets/images.png";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -14,6 +15,11 @@ const Navbar = () => {
       <h2 className='font-medium'>Become a host</h2>
     <button className='bg-gray-300'><Globe size={16} strokeWidth={1.5} /></button>
     <button  className='bg-gray-300'><Menu size={16} strokeWidth={1.5} /></button>
+     <Link to="/login">
+  <button className="border px-4 py-2 rounded-full">
+    Login
+  </button>
+  </Link>
     </div>
     
     </nav>
