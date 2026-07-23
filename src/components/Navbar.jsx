@@ -20,6 +20,11 @@ const Navbar = () => {
     Login
   </button>
   </Link>
+  <Link to="/wishlist">
+  <button className="border px-4 py-2 rounded-full">
+    Wishlist
+  </button>
+</Link>
     </div>
     
     </nav>

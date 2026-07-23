@@ -1,17 +1,13 @@
 import { Star } from 'lucide-react';
 import {Heart} from 'lucide-react';
-import { useState } from 'react';
+import { useContext } from "react";
+import { WishlistContext } from "../context/WishlistContext";
 import { Link } from "react-router-dom";
 
 const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
-  const [liked, setLiked] = useState(false)
+  const { wishlist, toggleWishlist } = useContext(WishlistContext);
  
-   const change=()=> {
-     setLiked(prevLiked => !prevLiked)
-  }
-
-
-
+   const liked = wishlist.some((item) => item.id === id);
 
   return (
     <Link to={`/property/${id}`}>
@@ -22,7 +18,21 @@ const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
     alt={location}
   />
   
-  <button  onClick={change} className="absolute top-5 right-6 p-1 rounded-full bg-black/20 hover:bg-black/40 transition"><Heart className={liked?"text-red-500":"text-white"} size={24} fill={liked?"red":"none"} /></button>
+  <button 
+  onClick={(e) => {
+    e.preventDefault();
+    toggleWishlist({
+      id,
+      image,
+      location,
+      price,
+      rating,
+      distance,
+      dates,
+    });
+  }}
+  className="absolute top-5 right-6 p-1 rounded-full bg-black/20 hover:bg-black/40 transition">
+    <Heart className={liked?"text-red-500":"text-white"} size={24} fill={liked?"red":"none"} /></button>
 
   <div className="flex justify-between mt-2">
     <h2 className="font-semibold">{location}</h2>
