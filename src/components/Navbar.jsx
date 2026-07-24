@@ -1,35 +1,62 @@
-import React from 'react'
-import {Globe} from 'lucide-react'
-import {Menu} from 'lucide-react'
+import { Globe, Menu, Moon, Sun } from "lucide-react";
 import logo from "../assets/images.png";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContext";
+import { useContext } from "react";
 
 const Navbar = () => {
-  return (
-    <nav className='flex justify-between items-center p-6'>
-       <div className='flex items-center gap-2'>
-      <img className='w-12 ' src={logo} alt="Airbnb logo" />
-      <h1 className='font-bold text-2xl text-[#FF385C]'>airbnb</h1>
-    </div>
-    <div className='flex items-center gap-4'>
-      <h2 className='font-medium'>Become a host</h2>
-    <button className='bg-gray-300'><Globe size={16} strokeWidth={1.5} /></button>
-    <button  className='bg-gray-300'><Menu size={16} strokeWidth={1.5} /></button>
-     <Link to="/login">
-  <button className="border px-4 py-2 rounded-full">
-    Login
-  </button>
-  </Link>
-  <Link to="/wishlist">
-  <button className="border px-4 py-2 rounded-full">
-    Wishlist
-  </button>
-</Link>
-    </div>
-    
-    </nav>
-   
-  )
-}
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
 
-export default Navbar
+  return (
+   <nav className="flex flex-wrap justify-between items-center p-6 gap-4">
+
+      {/* Left */}
+      <div className="flex items-center gap-2">
+        <img className="w-12" src={logo} alt="Airbnb logo" />
+        <h1 className="font-bold text-2xl text-[#FF385C]">
+          airbnb
+        </h1>
+      </div>
+
+      {/* Right */}
+      <div className="flex items-center gap-4">
+
+       <h2 className="hidden md:block font-medium">
+        Become a host
+      </h2>
+
+        <button className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+          <Globe size={18} />
+        </button>
+
+        <button className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+          <Menu size={18} />
+        </button>
+
+        {/* Dark Mode Button */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+
+        <Link to="/login">
+          <button className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+            Login
+          </button>
+        </Link>
+
+        <Link to="/wishlist">
+          <button className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+            Wishlist
+          </button>
+        </Link>
+
+      </div>
+
+    </nav>
+  );
+};
+
+export default Navbar;

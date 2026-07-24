@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter }from "react-router-dom"
+import ThemeProvider from "./context/ThemeContext";
 import './index.css'
 import WishlistProvider from "./context/WishlistContext";
 import App from './App.jsx'
@@ -8,9 +9,11 @@ import App from './App.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <WishlistProvider>
-       <BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter>
      <App /> 
     </BrowserRouter>
+      </ThemeProvider>
     </WishlistProvider>
   </StrictMode>,
 )

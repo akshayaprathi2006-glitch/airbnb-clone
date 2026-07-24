@@ -17,6 +17,13 @@ const properties = [
 
     price: 4500,
     rating: 4.9,
+    images: [
+        goa,
+        goa,
+        goa,
+        goa,
+        goa,
+      ],
 
     image: goa,
 
@@ -76,7 +83,15 @@ const properties = [
     price: 3500,
     rating: 4.8,
 
-    image: manali,
+    images: [
+      manali,
+      manali,
+      manali,
+      manali,
+      manali,
+    ],
+
+image: manali,
 
     host: "Rohit",
     superHost: false,
@@ -132,7 +147,15 @@ const properties = [
     price: 4000,
     rating: 4.7,
 
-    image: ooty,
+    images: [
+  ooty,
+  ooty,
+  ooty,
+  ooty,
+  ooty,
+],
+
+image: ooty,
 
     host: "Priya",
     superHost: true,
@@ -186,7 +209,15 @@ reviewCount: 97
     category: "Beach",
     price: 5200,
     rating: 4.9,
-    image: kerala,
+    images: [
+        kerala,
+        kerala,
+        kerala,
+        kerala,
+        kerala,
+      ],
+
+      image: kerala,
     host: "Anand",
     superHost: true,
     guests: 5,
@@ -227,7 +258,15 @@ reviewCount: 145
     category: "Mountains",
     price: 5000,
     rating: 4.9,
-    image: shimla,
+    images: [
+        shimla,
+        shimla,
+        shimla,
+        shimla,
+        shimla,
+      ],
+
+image: shimla,
     host: "Karan",
     superHost: true,
     guests: 6,
@@ -268,7 +307,15 @@ reviewCount: 172
     category: "Cabins",
     price: 4600,
     rating: 4.7,
-    image: coorg,
+   images: [
+        coorg,
+        coorg,
+        coorg,
+        coorg,
+        coorg,
+      ],
+
+image: coorg,
     host: "Meera",
     superHost: false,
     guests: 4,
@@ -309,7 +356,15 @@ reviewCount: 88
     category: "Camping",
     price: 3200,
     rating: 4.8,
-    image: rishikesh,
+    images: [
+  rishikesh,
+  rishikesh,
+  rishikesh,
+  rishikesh,
+  rishikesh,
+],
+
+image: rishikesh,
     host: "Vikram",
     superHost: false,
     guests: 3,

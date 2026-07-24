@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import properties from "../data/properties";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 
@@ -21,6 +22,8 @@ const [checkIn, setCheckIn] = useState("");
 const [checkOut, setCheckOut] = useState("");
 const [guests, setGuests] = useState(1);
 const [showModal, setShowModal] = useState(false);
+const [showGallery, setShowGallery] = useState(false);
+const [currentImage, setCurrentImage] = useState(0);
 useEffect(() => {
   let viewed =
     JSON.parse(localStorage.getItem("recentProperties")) || [];
@@ -46,7 +49,7 @@ if (checkIn && checkOut) {
     (end - start) / (1000 * 60 * 60 * 24)
   );
 }
-
+const navigate = useNavigate();
 const cleaningFee = 1200;
 const serviceFee = 850;
 const totalPrice =
@@ -56,55 +59,44 @@ const totalPrice =
 
  return (
   <div className="max-w-6xl mx-auto p-8">
-
-    <div className="grid grid-cols-2 gap-2 h-[500px]">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-auto lg:h-[500px]">
 
   <img
-    src={property.image}
-    alt={property.location}
-    className="w-full h-full object-cover rounded-l-2xl"
-  />
+  src={property.images[currentImage]}
+  alt={property.location}
+  onClick={() => setShowGallery(true)}
+  className="w-full h-72 lg:h-full object-cover rounded-xl lg:rounded-l-2xl cursor-pointer"
+/>
 
   <div className="grid grid-cols-2 gap-2">
 
-    <img
-      src={property.image}
-      alt=""
-      className="w-full h-full object-cover"
-    />
-
-    <img
-      src={property.image}
-      alt=""
-      className="w-full h-full object-cover rounded-tr-2xl"
-    />
-
-    <img
-      src={property.image}
-      alt=""
-      className="w-full h-full object-cover"
-    />
-
-    <img
-      src={property.image}
-      alt=""
-      className="w-full h-full object-cover rounded-br-2xl"
-    />
-
+    {property.images.slice(1).map((img, index) => (
+  <img
+    key={index}
+    src={img}
+    alt=""
+    onClick={() => {
+      setCurrentImage(index + 1);
+      setShowGallery(true);
+    }}
+    className="w-full h-full object-cover cursor-pointer"
+  />
+))}
   </div>
 
 </div>
-    <div className="mt-8 flex gap-12">
 
+    <div className="mt-8 flex flex-col lg:flex-row gap-12">
   {/* LEFT SECTION */}
-  <div className="w-2/3">
+  <div className="w-full lg:w-2/3">
 
     <h1 className="text-4xl font-bold">
       {property.title}
     </h1>
 
     <p className="text-gray-600 mt-2">
-      ⭐ {property.rating} • {property.reviewCount} reviews
+      ⭐ {property.rating} • {property.reviewCount}
+       reviews
     </p>
 
     <hr className="my-6" />
@@ -140,12 +132,11 @@ const totalPrice =
     </h2>
     <hr className="my-8" />
 
-    <div className="grid grid-cols-2 gap-4 mt-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
       {property.amenities.map((item) => (
         <div
           key={item}
-          className="border rounded-xl p-4 hover:shadow-md transition"
-        >
+          className="border rounded-xl p-4 hover:shadow-md transition" >
           {item}
         </div>
       ))}
@@ -178,7 +169,7 @@ const totalPrice =
 </div>
 
   {/* RIGHT SECTION */}
-  <div className="w-1/3">
+    <div className="w-full lg:w-1/3">
 
     <div className="border rounded-2xl shadow-xl p-6 sticky top-8">
 
@@ -283,7 +274,6 @@ const totalPrice =
 
   </div>
 )}
-
       </div>
 
     </div>
@@ -292,7 +282,7 @@ const totalPrice =
 </div>
 {showModal && (
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-2xl p-8 w-[450px] shadow-2xl">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 w-[90%] max-w-[450px] shadow-2xl">
 
       <h2 className="text-3xl font-bold text-center mb-6">
         🎉 Confirm Booking
@@ -317,8 +307,7 @@ const totalPrice =
 
         <button
         onClick={() => {
-          alert("🎉 Booking Confirmed!");
-          setShowModal(false);
+         navigate("/booking-success");
         }}
         className="flex-1 bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-3"
       >
@@ -327,6 +316,49 @@ const totalPrice =
       </div>
 
     </div>
+  </div>
+)}
+{showGallery && (
+  <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+
+    <button
+      onClick={() => setShowGallery(false)}
+      className="absolute top-6 right-8 text-white text-4xl"
+    >
+      ×
+    </button>
+
+    <button
+      onClick={() =>
+        setCurrentImage(
+          currentImage === 0
+            ? property.images.length - 1
+            : currentImage - 1
+        )
+      }
+      className="absolute left-8 text-white text-5xl"
+    >
+      ❮
+    </button>
+
+    <img
+      src={property.images[currentImage]}
+      className="max-h-[80vh] max-w-[85vw] rounded-2xl"
+    />
+
+    <button
+      onClick={() =>
+        setCurrentImage(
+          currentImage === property.images.length - 1
+            ? 0
+            : currentImage + 1
+        )
+      }
+      className="absolute right-8 text-white text-5xl"
+    >
+      ❯
+    </button>
+
   </div>
 )}
 </div>

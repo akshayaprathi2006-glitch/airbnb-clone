@@ -4,6 +4,8 @@ import PropertyDetails from "./pages/PropertyDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Wishlist from "./pages/Wishlist";
+import NotFound from "./pages/NotFound";
+import BookingSuccess from "./pages/BookingSuccess";
 
 const App = () => {
   return (
@@ -13,6 +15,10 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/wishlist" element={<Wishlist />} />
+      <Route
+        path="/booking-success"
+        element={<BookingSuccess />}/>
+        <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
