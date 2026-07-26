@@ -3,12 +3,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
         return res.status(400).json({
-            message: "All fields are required"
+            message: "All fields are required",
         });
     }
 
@@ -16,7 +15,7 @@ const register = async (req, res) => {
 
     if (existingUser) {
         return res.status(409).json({
-            message: "User already exists"
+            message: "User already exists",
         });
     }
 
@@ -48,9 +47,7 @@ const register = async (req, res) => {
             role: user.role,
         },
     });
-
 };
-
 
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -69,7 +66,11 @@ const login = async (req, res) => {
         });
     }
 
+    console.log("User found:", user.email);
+
     const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log("Password Match:", isMatch);
 
     if (!isMatch) {
         return res.status(401).json({
