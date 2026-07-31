@@ -1,3 +1,4 @@
+const uploadToCloudinary = require("../utils/cloudinaryUpload");
 const Property = require("../models/property.model");
 
 const createProperty = async (req, res) => {
@@ -7,39 +8,43 @@ const createProperty = async (req, res) => {
       description,
       price,
       location,
-      images,
       guests,
       bedrooms,
       bathrooms,
       amenities,
     } = req.body;
 
-    if (!title || !description || !price || !location) {
-    return res.status(400).json({
-        message: "Title, description, price and location are required"
-    });
-}
+    let imageUrls = [];
+
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const uploadedImage = await uploadToCloudinary(file.buffer);
+        imageUrls.push(uploadedImage.secure_url);
+      }
+    }
 
     const property = await Property.create({
       title,
       description,
       price,
       location,
-      images,
+      images: imageUrls,
       guests,
       bedrooms,
       bathrooms,
       amenities,
-
       host: req.user.id,
     });
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "Property created successfully",
       property,
     });
+
   } catch (error) {
-    return res.status(500).json({
+    console.error(error);
+
+    res.status(500).json({
       message: error.message,
     });
   }

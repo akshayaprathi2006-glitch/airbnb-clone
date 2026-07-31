@@ -1,5 +1,6 @@
 const express = require("express");
 const authMiddleware = require("../middleware/auth.middleware");
+const upload = require("../middleware/upload.middleware");
 const {
     createProperty,
     getAllProperties,
@@ -10,7 +11,12 @@ const {
 
 const router = express.Router();
 
-router.post("/", authMiddleware, createProperty);
+router.post(
+    "/",
+    authMiddleware,
+    upload.array("images", 5),
+    createProperty
+);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById);
 router.put("/:id", authMiddleware, updateProperty);
