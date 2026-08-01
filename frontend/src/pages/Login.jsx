@@ -1,6 +1,42 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate,Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+const [formData, setFormData] = useState({
+  email: "",
+  password: "",
+});
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+   const res = await axios.post(
+  "http://localhost:3000/api/auth/login",
+  formData
+);
+
+    alert(res.data.message);
+
+   localStorage.setItem("token", res.data.token);
+localStorage.setItem("user", JSON.stringify(res.data.user));
+
+    navigate("/");
+  } catch (error) {
+    alert(
+      error.response?.data?.message || "Login failed"
+    );
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
 
@@ -14,17 +50,24 @@ const Login = () => {
           Log in to your Airbnb account
         </p>
 
-        <form className="space-y-5">
+        <form
+                onSubmit={handleSubmit}
+                className="space-y-5"
+              >
 
           <div>
             <label className="block font-medium mb-2">
               Email
             </label>
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500" />
+           <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email"
+                  className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                />
           </div>
 
           <div>
@@ -33,16 +76,20 @@ const Login = () => {
             </label>
 
             <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500"/>
-          </div>
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                  className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                />
+            </div>
 
-          <button
-            className="w-full bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-lg font-semibold transition">
-            Login
-          </button>
-
+         <button
+              type="submit"
+              className="w-full bg-rose-500 hover:bg-rose-600 text-white py-3 rounded-lg font-semibold transition" >
+              Login
+            </button>
         </form>
 
         <div className="flex items-center my-6">
