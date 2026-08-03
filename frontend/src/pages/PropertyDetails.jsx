@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import properties from "../data/properties";
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -7,17 +7,11 @@ import { useEffect } from "react";
 
 const PropertyDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
-const property = properties.find(
-  (property) => property.id === Number(id)
-);
-if (!property) {
-  return (
-    <div className="text-center mt-20 text-2xl">
-      Property not found
-    </div>
-  );
-}
+
+const [property, setProperty] = useState(null);
+
 const [checkIn, setCheckIn] = useState("");
 const [checkOut, setCheckOut] = useState("");
 const [guests, setGuests] = useState(1);
@@ -25,31 +19,56 @@ const [showModal, setShowModal] = useState(false);
 const [showGallery, setShowGallery] = useState(false);
 const [currentImage, setCurrentImage] = useState(0);
 useEffect(() => {
-  let viewed =
-    JSON.parse(localStorage.getItem("recentProperties")) || [];
+  const fetchProperty = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/properties/${id}`
+      );
 
-  viewed = viewed.filter((item) => item.id !== property.id);
+      setProperty(res.data.property);
 
-  viewed.unshift(property);
+      let viewed =
+        JSON.parse(localStorage.getItem("recentProperties")) || [];
 
-  viewed = viewed.slice(0, 5);
+      viewed = viewed.filter(
+        (item) => item._id !== res.data.property._id
+      );
 
-  localStorage.setItem(
-    "recentProperties",
-    JSON.stringify(viewed)
-  );
-}, [property]);
+      viewed.unshift(res.data.property);
 
+      viewed = viewed.slice(0, 5);
+
+      localStorage.setItem(
+        "recentProperties",
+        JSON.stringify(viewed)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  fetchProperty();
+}, [id]);
+
+
+ if (!property) {
+    return (
+      <div className="text-center mt-20 text-2xl">
+        Loading...
+      </div>
+    );
+  }
 
 let nights = 0;
+
 if (checkIn && checkOut) {
   const start = new Date(checkIn);
   const end = new Date(checkOut);
+
   nights = Math.ceil(
     (end - start) / (1000 * 60 * 60 * 24)
   );
 }
-const navigate = useNavigate();
 const cleaningFee = 1200;
 const serviceFee = 850;
 const totalPrice =
@@ -70,7 +89,7 @@ const totalPrice =
 
   <div className="grid grid-cols-2 gap-2">
 
-    {property.images.slice(1).map((img, index) => (
+     {property.images?.slice(1).map((img,index)=>(
   <img
     key={index}
     src={img}
@@ -95,7 +114,7 @@ const totalPrice =
     </h1>
 
     <p className="text-gray-600 mt-2">
-      ⭐ {property.rating} • {property.reviewCount}
+      ⭐ {property.rating} • {property.reviews?.length || 0} reviews
        reviews
     </p>
 
@@ -133,13 +152,14 @@ const totalPrice =
     <hr className="my-8" />
 
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-      {property.amenities.map((item) => (
-        <div
-          key={item}
-          className="border rounded-xl p-4 hover:shadow-md transition" >
-          {item}
-        </div>
-      ))}
+     {property.amenities?.map((item) => (
+  <div
+    key={item}
+    className="border rounded-xl p-4 hover:shadow-md transition"
+  >
+    {item}
+  </div>
+))}
     </div>
     <hr className="my-8" />
 
@@ -148,7 +168,7 @@ const totalPrice =
 </h2>
 
 <div className="space-y-5">
-  {property.reviews.map((review) => (
+  {property.reviews?.map((review) => (
     <div
       key={review.id}
       className="border rounded-xl p-5 shadow-sm hover:shadow-md transition">
@@ -331,9 +351,7 @@ const totalPrice =
     <button
       onClick={() =>
         setCurrentImage(
-          currentImage === 0
-            ? property.images.length - 1
-            : currentImage - 1
+          currentImage === property.images?.length - 1
         )
       }
       className="absolute left-8 text-white text-5xl"
@@ -342,7 +360,7 @@ const totalPrice =
     </button>
 
     <img
-      src={property.images[currentImage]}
+      src={property.images?.[currentImage]}
       className="max-h-[80vh] max-w-[85vw] rounded-2xl"
     />
 

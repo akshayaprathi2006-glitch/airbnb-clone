@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from '../components/Navbar'
 import Navtabs from '../components/Navtabs'
 import PropertyCards from '../components/PropertyCards'
-import properties from '../data/properties'
+import axios from "axios";
 import Categories from '../components/Categories'
 import SearchFilter from '../components/SearchFilter'
 import Footer from "../components/Footer";
@@ -16,23 +16,34 @@ const Homepage = () => {
   const [sortBy, setSortBy] = useState("");
   const [recentProperties, setRecentProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [properties, setProperties] = useState([]);
 useEffect(() => {
-  const viewed =
-    JSON.parse(localStorage.getItem("recentProperties")) || [];
+  const fetchProperties = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:3000/api/properties"
+      );
 
-  setRecentProperties(viewed);
+      setProperties(res.data.properties);
 
-  const timer = setTimeout(() => {
-    setLoading(false);
-  }, 1500);
+      const viewed =
+        JSON.parse(localStorage.getItem("recentProperties")) || [];
 
-  return () => clearTimeout(timer);
+      setRecentProperties(viewed);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  fetchProperties();
 }, []);
   const filteredProperties = properties.filter((property) => {
-  const matchesCategory =
-    selectedCategory === "All" ||
-    property.category === selectedCategory;
-
+  const matchesCategory = true;
   const matchesSearch =
     property.location
       .toLowerCase()
@@ -44,7 +55,7 @@ useEffect(() => {
 const sortedProperties = filteredProperties.filter(
   (property) =>
     !recentProperties.some(
-      (recent) => recent.id === property.id
+      (recent) => recent._id === property._id
     )
 );
 
@@ -103,9 +114,9 @@ if (loading) {
      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {recentProperties.map((property) => (
         <PropertyCards
-          key={property.id}
-          id={property.id}
-          image={property.image}
+          key={property._id}
+          id={property._id}
+          image={property.images[0]}
           location={property.location}
           price={property.price}
           rating={property.rating}
@@ -121,9 +132,9 @@ if (loading) {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {sortedProperties.map((property) => (
         <PropertyCards
-          key={property.id}
-          id={property.id}
-          image={property.image}
+          key={property._id}
+          id={property._id}
+          image={property.images[0]}
           location={property.location}
           price={property.price}
           rating={property.rating}

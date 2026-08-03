@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
   const { wishlist, toggleWishlist } = useContext(WishlistContext);
  
-   const liked = wishlist.some((item) => item.id === id);
+  const liked = wishlist.some((item) => item._id === id);
 
   return (
     <Link to={`/property/${id}`}>
@@ -22,14 +22,14 @@ const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
   onClick={(e) => {
     e.preventDefault();
     toggleWishlist({
-      id,
-      image,
-      location,
-      price,
-      rating,
-      distance,
-      dates,
-    });
+        _id: id,
+        images: [image],
+        location,
+        price,
+        rating,
+        distance,
+        dates,
+      });
   }}
   className="absolute top-5 right-6 p-1 rounded-full bg-black/20 hover:bg-black/40 transition">
     <Heart className={liked?"text-red-500":"text-white"} size={24} fill={liked?"red":"none"} /></button>
@@ -39,13 +39,20 @@ const PropertyCards = ({id,image,location,price,rating,distance,dates}) => {
 
     <div className="flex items-center gap-1">
       <Star size={16} fill="black" strokeWidth={0} />
-      <span>{rating}</span>
+      <span>{rating || "New"}</span>
     </div>
   </div>
 
-  <p className="text-gray-600 font-semibold mt-1">₹{price} for 2 days</p>
+<p className="text-gray-600 font-semibold mt-1">
+  ₹{price} / night
+</p>
+ {distance && (
   <p className="text-gray-500">{distance}</p>
-<p className="text-gray-500">{dates}</p>
+)}
+
+{dates && (
+  <p className="text-gray-500">{dates}</p>
+)}
 </div>
     </Link>
    

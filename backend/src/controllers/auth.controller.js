@@ -52,6 +52,9 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
 
+    console.log("Email from React:", email);
+    console.log("Password from React:", password);
+
     if (!email || !password) {
         return res.status(400).json({
             message: "Email and password are required",
@@ -99,7 +102,6 @@ const login = async (req, res) => {
         },
     });
 };
-
 module.exports = {
     register,
     login,
