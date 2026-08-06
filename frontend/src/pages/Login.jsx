@@ -25,12 +25,11 @@ const handleSubmit = async (e) => {
   formData
 );
 
-    alert(res.data.message);
-
    localStorage.setItem("token", res.data.token);
 localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    navigate("/");
+console.log("Navigating...");
+navigate("/");
   } catch (error) {
     alert(
       error.response?.data?.message || "Login failed"

@@ -76,6 +76,36 @@ const totalPrice =
     ? property.price * nights + cleaningFee + serviceFee
     : 0;
 
+
+    const handleBooking = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    await axios.post(
+      "http://localhost:3000/api/bookings",
+      {
+        propertyId: property._id,
+        checkIn,
+        checkOut,
+        guests,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    navigate("/booking-success");
+
+  } catch (err) {
+    console.log(err);
+    alert(
+      err.response?.data?.message || "Booking failed"
+    );
+  }
+};
+
  return (
   <div className="max-w-6xl mx-auto p-8">
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-auto lg:h-[500px]">
@@ -121,7 +151,7 @@ const totalPrice =
     <hr className="my-6" />
 
     <h2 className="text-2xl font-semibold">
-      Hosted by {property.host}
+      Hosted by {property.host?.name || "Host"}
       {property.superHost && (
         <span className="ml-3 text-sm bg-rose-100 text-rose-600 px-3 py-1 rounded-full">
           Superhost
@@ -295,9 +325,7 @@ const totalPrice =
   </div>
 )}
       </div>
-
     </div>
-
   </div>
 </div>
 {showModal && (
@@ -320,19 +348,15 @@ const totalPrice =
       <div className="flex gap-4 mt-8">
         <button
           onClick={() => setShowModal(false)}
-          className="flex-1 border rounded-xl py-3"
-        >
+          className="flex-1 border rounded-xl py-3">
           Cancel
         </button>
 
         <button
-        onClick={() => {
-         navigate("/booking-success");
-        }}
-        className="flex-1 bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-3"
-      >
-        Confirm Booking
-      </button>
+                  onClick={handleBooking}
+                  className="flex-1 bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-3">
+                  Confirm Booking
+                </button>
       </div>
 
     </div>
@@ -350,10 +374,12 @@ const totalPrice =
 
     <button
       onClick={() =>
-        setCurrentImage(
-          currentImage === property.images?.length - 1
-        )
-      }
+    setCurrentImage(
+    currentImage === 0
+      ? property.images.length - 1
+      : currentImage - 1
+  )
+}
       className="absolute left-8 text-white text-5xl"
     >
       ❮

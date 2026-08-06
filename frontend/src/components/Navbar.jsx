@@ -1,11 +1,20 @@
 import { Globe, Menu, Moon, Sun } from "lucide-react";
 import logo from "../assets/images.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import { useContext } from "react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
   const { darkMode, setDarkMode } = useContext(ThemeContext);
+
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  navigate("/login");
+};
 
   return (
    <nav className="flex flex-wrap justify-between items-center p-6 gap-4">
@@ -41,18 +50,43 @@ const Navbar = () => {
           {darkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
-        <Link to="/login">
-          <button className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
-            Login
-          </button>
-        </Link>
+        {!user && (
+            <Link to="/login">
+              <button className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                Login
+              </button>
+            </Link>
+          )}
 
         <Link to="/wishlist">
           <button className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
             Wishlist
           </button>
         </Link>
-
+       <button
+            onClick={() => navigate("/my-bookings")}
+            className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+            My Bookings
+          </button>
+           {user && (
+              <span className="font-semibold">
+                Hi, {user.name}
+              </span>
+)}
+          {user && (
+  <button
+    onClick={handleLogout}
+    className="border border-gray-300 dark:border-gray-600 px-5 py-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+  >
+    Logout
+  </button>
+)}
+<button
+  onClick={() => navigate("/host-bookings")}
+  className="border border-gray-300 px-5 py-2 rounded-full"
+>
+  Host Dashboard
+</button>
       </div>
 
     </nav>
