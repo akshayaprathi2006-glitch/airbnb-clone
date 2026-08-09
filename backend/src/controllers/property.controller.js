@@ -8,6 +8,7 @@ const createProperty = async (req, res) => {
       description,
       price,
       location,
+      category,
       guests,
       bedrooms,
       bathrooms,
@@ -28,6 +29,7 @@ const createProperty = async (req, res) => {
       description,
       price,
       location,
+      category,
       images: imageUrls,
       guests,
       bedrooms,
@@ -162,10 +164,27 @@ const deleteProperty = async (req, res) => {
     }
 };
 
+const getMyProperties = async (req, res) => {
+  try {
+    const properties = await Property.find({
+      host: req.user.id,
+    });
+
+    res.status(200).json({
+      properties,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
-    createProperty,
-    getAllProperties,
-    getPropertyById,
-    updateProperty,
-    deleteProperty,
+  createProperty,
+  getAllProperties,
+  getPropertyById,
+  updateProperty,
+  deleteProperty,
+  getMyProperties,
 };

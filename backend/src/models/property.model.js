@@ -21,6 +21,11 @@ const propertySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+      enum: ["All", "Beach", "Camping", "Mountains", "Cabins", "Tropical"],
+      default: "All",
+    },
 
     images: [
       {

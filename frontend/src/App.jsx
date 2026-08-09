@@ -8,6 +8,9 @@ import NotFound from "./pages/NotFound";
 import BookingSuccess from "./pages/BookingSuccess";
 import MyBookings from "./pages/MyBookings";
 import HostBookings from "./pages/HostBookings";
+import HostDashboard from "./pages/HostDashboard";
+import AddProperty from "./pages/AddProperty";
+import EditProperty from "./pages/EditProperty";
 
 const App = () => {
   return (
@@ -23,6 +26,9 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/host-bookings" element={<HostBookings />} />
+        <Route path="/host-dashboard" element={<HostDashboard />} />
+        <Route path="/add-property" element={<AddProperty />} />
+        <Route path="/edit-property/:id"element={<EditProperty />}/>
     </Routes>
   )
 }

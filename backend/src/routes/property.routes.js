@@ -2,11 +2,12 @@ const express = require("express");
 const authMiddleware = require("../middleware/auth.middleware");
 const upload = require("../middleware/upload.middleware");
 const {
-    createProperty,
-    getAllProperties,
-     getPropertyById,
-     updateProperty,
-     deleteProperty
+  createProperty,
+  getAllProperties,
+  getPropertyById,
+  updateProperty,
+  deleteProperty,
+  getMyProperties,
 } = require("../controllers/property.controller");
 
 const router = express.Router();
@@ -18,6 +19,11 @@ router.post(
     createProperty
 );
 router.get("/", getAllProperties);
+router.get(
+  "/my-properties",
+  authMiddleware,
+  getMyProperties
+);
 router.get("/:id", getPropertyById);
 router.put("/:id", authMiddleware, updateProperty);
 router.delete("/:id", authMiddleware, deleteProperty);

@@ -85,7 +85,18 @@ const Navbar = () => {
   onClick={() => navigate("/host-bookings")}
   className="border border-gray-300 px-5 py-2 rounded-full"
 >
+  Host Bookings
+</button>
+<button
+  onClick={() => navigate("/host-dashboard")}
+  className="border border-gray-300 px-5 py-2 rounded-full">
   Host Dashboard
+</button>
+<button
+onClick={() => navigate("/add-property")}
+className="bg-pink-500 text-white px-4 py-2 rounded"
+>
++ Add Property
 </button>
       </div>
 
