@@ -21,9 +21,7 @@ const [currentImage, setCurrentImage] = useState(0);
 useEffect(() => {
   const fetchProperty = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/properties/${id}`
-      );
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/properties/${id}`);
 
       setProperty(res.data.property);
 
@@ -82,7 +80,7 @@ const totalPrice =
     const token = localStorage.getItem("token");
 
     await axios.post(
-      "http://localhost:3000/api/bookings",
+      "${import.meta.env.VITE_API_URL}/api/bookings",
       {
         propertyId: property._id,
         checkIn,

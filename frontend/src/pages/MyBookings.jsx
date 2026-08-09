@@ -12,8 +12,7 @@ const MyBookings = () => {
     try {
       const token = localStorage.getItem("token");
 
-     const res = await axios.get(
-            "http://localhost:3000/api/bookings/my",
+     const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/my`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,7 +31,7 @@ const MyBookings = () => {
       const token = localStorage.getItem("token");
 
       await axios.put(
-  `http://localhost:3000/api/bookings/${id}/cancel`,
+  `${import.meta.env.VITE_API_URL}/api/bookings/${id}/cancel`,
   {},
   {
     headers: {

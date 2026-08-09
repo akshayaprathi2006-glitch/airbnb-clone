@@ -12,8 +12,7 @@ const HostBookings = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(
-        "http://localhost:3000/api/bookings/host",
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/host`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

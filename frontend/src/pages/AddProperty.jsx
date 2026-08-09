@@ -58,9 +58,9 @@ const AddProperty = () => {
         data.append("images", images[i]);
       }
 
-      await axios.post(
-        "http://localhost:3000/api/properties",
-        data,
+      axios.post(
+            `${import.meta.env.VITE_API_URL}/api/properties`,
+            data,
         {
           headers: {
             Authorization: `Bearer ${token}`,

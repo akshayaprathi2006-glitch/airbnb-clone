@@ -25,7 +25,7 @@ const EditProperty = () => {
     const fetchProperty = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/properties/${id}`
+          `${import.meta.env.VITE_API_URL}/api/properties/${id}`
         );
 
         const property = res.data.property;
@@ -76,7 +76,7 @@ const EditProperty = () => {
         .filter((item) => item !== "");
 
       await axios.put(
-        `http://localhost:3000/api/properties/${id}`,
+        `${import.meta.env.VITE_API_URL}/api/properties/${id}`,
         {
           title: formData.title,
           description: formData.description,

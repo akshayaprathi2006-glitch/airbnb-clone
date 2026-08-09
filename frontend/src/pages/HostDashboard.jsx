@@ -15,7 +15,7 @@ const HostDashboard = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:3000/api/properties/my-properties",
+  `${import.meta.env.VITE_API_URL}/api/properties/my-properties`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -34,7 +34,7 @@ const HostDashboard = () => {
       const token = localStorage.getItem("token");
 
       await axios.delete(
-        `http://localhost:3000/api/properties/${id}`,
+  `${import.meta.env.VITE_API_URL}/api/properties/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
