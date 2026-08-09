@@ -6,7 +6,7 @@ import axios from "axios";
 import Categories from "../components/Categories";
 import SearchFilter from "../components/SearchFilter";
 import Footer from "../components/Footer";
-import BackToTop from "../components/BackToTop";
+import BackToTop from "../components/BacktoTop";
 
 const Homepage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
