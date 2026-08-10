@@ -10,7 +10,10 @@ const wishlistRoutes = require("./routes/wishlist.routes");
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: [
+        "http://localhost:5173",
+        "https://airbnb-clone-1-ktah.onrender.com"
+    ],
     credentials: true,
 }));
 
