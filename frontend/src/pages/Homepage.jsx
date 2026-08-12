@@ -29,7 +29,7 @@ const Homepage = () => {
         setProperties(res.data?.properties || []);
 
         const viewed =
-          JSON.parse(localStorage.getItem("recentProperties")) || [];
+          JSON.parse(localStorage.getItem("recentProperties") || "[]")
 
         setRecentProperties(Array.isArray(viewed) ? viewed : []);
 

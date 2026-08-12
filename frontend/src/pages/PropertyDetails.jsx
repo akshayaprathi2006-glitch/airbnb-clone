@@ -26,7 +26,7 @@ useEffect(() => {
       setProperty(res.data.property);
 
       let viewed =
-        JSON.parse(localStorage.getItem("recentProperties")) || [];
+        JSON.parse(localStorage.getItem("recentProperties") || "[]")
 
       viewed = viewed.filter(
         (item) => item._id !== res.data.property._id
