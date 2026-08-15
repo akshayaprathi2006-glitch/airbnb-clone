@@ -11,6 +11,8 @@ import BackToTop from "../components/BacktoTop";
 const Homepage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchText, setSearchText] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [recentProperties, setRecentProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,12 +111,15 @@ const Homepage = () => {
       <Navtabs />
 
       <SearchFilter
-        searchText={searchText}
-        setSearchText={setSearchText}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-      />
-
+            searchText={searchText}
+            setSearchText={setSearchText}
+            checkIn={checkIn}
+            setCheckIn={setCheckIn}
+            checkOut={checkOut}
+            setCheckOut={setCheckOut}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
       <Categories
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}

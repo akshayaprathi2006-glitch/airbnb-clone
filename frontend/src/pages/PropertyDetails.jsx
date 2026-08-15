@@ -16,6 +16,7 @@ const [checkIn, setCheckIn] = useState("");
 const [checkOut, setCheckOut] = useState("");
 const [guests, setGuests] = useState(1);
 const [showModal, setShowModal] = useState(false);
+const [showLoginModal, setShowLoginModal] = useState(false);
 const [showGallery, setShowGallery] = useState(false);
 const [currentImage, setCurrentImage] = useState(0);
 useEffect(() => {
@@ -75,12 +76,18 @@ const totalPrice =
     : 0;
 
 
-    const handleBooking = async () => {
-  try {
-    const token = localStorage.getItem("token");
+   const handleBooking = async () => {
+  const token = localStorage.getItem("token");
 
+  if (!token) {
+    setShowModal(false);
+    setShowLoginModal(true);
+    return;
+  }
+
+  try {
     await axios.post(
-      "${import.meta.env.VITE_API_URL}/api/bookings",
+      `${import.meta.env.VITE_API_URL}/api/bookings`,
       {
         propertyId: property._id,
         checkIn,
@@ -280,7 +287,16 @@ const totalPrice =
               </p>
             )}
         <button
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+                    const token = localStorage.getItem("token");
+
+                    if (!token) {
+                      setShowLoginModal(true);
+                      return;
+                    }
+
+                    setShowModal(true);
+                  }}
             disabled={nights <= 0}
             className={`w-full py-3 rounded-xl font-semibold text-white ${
               nights > 0
@@ -326,6 +342,39 @@ const totalPrice =
     </div>
   </div>
 </div>
+{showLoginModal && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 w-[90%] max-w-[420px] shadow-2xl text-center">
+
+      <h2 className="text-2xl font-bold mb-3">
+        Login required
+      </h2>
+
+      <p className="text-gray-600 dark:text-gray-300 mb-6">
+        Please log in to your Airbnb account before making a reservation.
+      </p>
+
+      <div className="flex gap-3">
+
+        <button
+          onClick={() => setShowLoginModal(false)}
+          className="flex-1 border rounded-xl py-3"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => navigate("/login")}
+          className="flex-1 bg-rose-500 hover:bg-rose-600 text-white rounded-xl py-3"
+        >
+          Log in
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+)}
 {showModal && (
   <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 w-[90%] max-w-[450px] shadow-2xl">

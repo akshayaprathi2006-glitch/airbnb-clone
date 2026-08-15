@@ -3,16 +3,35 @@ import { createContext, useState } from "react";
 export const WishlistContext = createContext();
 
 const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState([]);
+
+  const [wishlist, setWishlist] = useState(() => {
+    const savedWishlist = localStorage.getItem("wishlist");
+
+    return savedWishlist ? JSON.parse(savedWishlist) : [];
+  });
 
   const toggleWishlist = (property) => {
-    const exists = wishlist.find((item) => item.id === property.id);
+
+    const exists = wishlist.some(
+      (item) => item._id === property._id
+    );
+
+    let updatedWishlist;
 
     if (exists) {
-      setWishlist(wishlist.filter((item) => item.id !== property.id));
+      updatedWishlist = wishlist.filter(
+        (item) => item._id !== property._id
+      );
     } else {
-      setWishlist([...wishlist, property]);
+      updatedWishlist = [...wishlist, property];
     }
+
+    setWishlist(updatedWishlist);
+
+    localStorage.setItem(
+      "wishlist",
+      JSON.stringify(updatedWishlist)
+    );
   };
 
   return (

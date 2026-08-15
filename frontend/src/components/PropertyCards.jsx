@@ -1,7 +1,7 @@
 import { Star, Heart } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { WishlistContext } from "../context/WishlistContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const PropertyCards = ({
   id,
@@ -14,8 +14,14 @@ const PropertyCards = ({
 }) => {
   const { wishlist, toggleWishlist } = useContext(WishlistContext);
 
-  const liked = wishlist.some((item) => item._id === id);
+  const navigate = useNavigate();
 
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
+  const liked = wishlist.some((item) => item._id === id);
+  
   return (
     <div className="group relative">
       <Link to={`/property/${id}`}>
@@ -79,20 +85,25 @@ const PropertyCards = ({
 
       {/* Wishlist button */}
       <button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
+       onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-          toggleWishlist({
-            _id: id,
-            images: [image],
-            location,
-            price,
-            rating,
-            distance,
-            dates,
-          });
-        }}
+            if (!user) {
+              setShowLoginModal(true);
+              return;
+            }
+
+            toggleWishlist({
+              _id: id,
+              images: [image],
+              location,
+              price,
+              rating,
+              distance,
+              dates,
+            });
+          }}
         className="absolute top-3 right-3 p-2 hover:scale-110 transition"
       >
         <Heart
@@ -102,8 +113,45 @@ const PropertyCards = ({
           strokeWidth={2}
         />
       </button>
+
+{showLoginModal && (
+  <div
+    className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]"
+    onClick={() => setShowLoginModal(false)}
+  >
+    <div
+      className="bg-white rounded-2xl p-8 w-[90%] max-w-[400px] shadow-2xl"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="text-2xl font-bold text-center">
+        Login required
+      </h2>
+
+      <p className="text-gray-500 text-center mt-3">
+        Please log in to add properties to your wishlist.
+      </p>
+
+      <div className="flex gap-3 mt-7">
+        <button
+          onClick={() => setShowLoginModal(false)}
+          className="flex-1 border border-gray-300 rounded-xl py-3 font-semibold"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={() => navigate("/login")}
+          className="flex-1 bg-[#FF385C] text-white rounded-xl py-3 font-semibold hover:bg-[#e31c5f]"
+        >
+          Log in
+        </button>
+      </div>
     </div>
-  );
+  </div>
+)}
+
+</div>
+);
 };
 
 export default PropertyCards;

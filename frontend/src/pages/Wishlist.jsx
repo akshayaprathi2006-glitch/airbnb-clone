@@ -30,18 +30,18 @@ const Wishlist = () => {
 </div>
       ) : (
         <div className="grid grid-cols-4 gap-6">
-          {wishlist.map((property) => (
-            <PropertyCards
-              key={property.id}
-              id={property.id}
-              image={property.image}
-              location={property.location}
-              price={property.price}
-              rating={property.rating}
-              distance={property.distance}
-              dates={property.dates}
-            />
-          ))}
+         {wishlist.map((property) => (
+              <PropertyCards
+                key={property._id}
+                id={property._id}
+                image={property.images?.[0]}
+                location={property.location}
+                price={property.price}
+                rating={property.rating}
+                distance={property.distance}
+                dates={property.dates}
+              />
+            ))}
         </div>
       )}
     </div>
