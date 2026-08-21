@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Search } from "lucide-react";
 
 const Searchbar = ({
@@ -8,9 +8,8 @@ const Searchbar = ({
   setCheckIn,
   checkOut,
   setCheckOut,
+  checkAvailability,
 }) => {
-  
-
   return (
     <div className="flex justify-center mt-6 px-4">
       <div className="flex items-center w-full max-w-[850px] border border-gray-300 rounded-full shadow-md hover:shadow-lg transition bg-white">
@@ -75,6 +74,7 @@ const Searchbar = ({
         {/* SEARCH BUTTON */}
         <button
           type="button"
+          onClick={checkAvailability}
           className="mr-2 bg-[#FF385C] text-white p-3 rounded-full hover:bg-[#E31C5F] transition"
         >
           <Search size={20} />

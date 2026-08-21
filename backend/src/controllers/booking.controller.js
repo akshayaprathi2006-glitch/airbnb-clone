@@ -159,9 +159,55 @@ if (existingBooking) {
     }
 };
 
+
+const checkAvailability = async (req, res) => {
+    try {
+        const { checkIn, checkOut } = req.body;
+
+        // Validate dates
+        if (!checkIn || !checkOut) {
+            return res.status(400).json({
+                message: "Check-in and check-out dates are required",
+            });
+        }
+
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+
+        if (checkOutDate <= checkInDate) {
+            return res.status(400).json({
+                message: "Invalid booking dates",
+            });
+        }
+
+        // Find all confirmed bookings that overlap
+        const existingBookings = await Booking.find({
+            status: "confirmed",
+            checkIn: { $lt: checkOutDate },
+            checkOut: { $gt: checkInDate },
+        }).select("property");
+
+        // Get IDs of properties that are already booked
+        const bookedPropertyIds = existingBookings.map(
+            (booking) => booking.property.toString()
+        );
+
+        return res.status(200).json({
+            message: "Availability checked successfully",
+            bookedPropertyIds,
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
     cancelBooking,
     getHostBookings,
+    checkAvailability,
 };

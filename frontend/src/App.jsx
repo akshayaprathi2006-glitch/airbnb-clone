@@ -11,6 +11,8 @@ import HostBookings from "./pages/HostBookings";
 import HostDashboard from "./pages/HostDashboard";
 import AddProperty from "./pages/AddProperty";
 import EditProperty from "./pages/EditProperty";
+import Experiences from "./pages/Experiences";
+import Services from "./pages/Services";
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
       <Route
         path="/booking-success"
         element={<BookingSuccess />}/>
+        <Route path="/experiences" element={<Experiences />} />
+        <Route path="/services" element={<Services />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/host-bookings" element={<HostBookings />} />

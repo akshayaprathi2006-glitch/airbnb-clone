@@ -1,6 +1,6 @@
 import { Globe, Menu, Moon, Sun, User } from "lucide-react";
 import logo from "../assets/images.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context/ThemeContext";
 import { useContext, useState } from "react";
 
@@ -40,24 +40,40 @@ const Navbar = () => {
         {/* ================= CENTER ================= */}
         <div className="hidden md:flex items-center gap-10">
 
-          <Link
-            to="/"
-            className="font-semibold text-gray-900 dark:text-white hover:text-[#FF385C] transition"
-          >
-            Homes
-          </Link>
+  <NavLink
+    to="/"
+    className={({ isActive }) =>
+      isActive
+        ? "font-semibold text-gray-900 dark:text-white border-b-2 border-black dark:border-white pb-2"
+        : "font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition"
+    }
+  >
+    Homes
+  </NavLink>
 
-          <span className="text-gray-500 cursor-pointer hover:text-gray-900 dark:hover:text-white transition">
-            Experiences
-          </span>
+  <NavLink
+    to="/experiences"
+    className={({ isActive }) =>
+      isActive
+        ? "font-semibold text-gray-900 dark:text-white border-b-2 border-black dark:border-white pb-2"
+        : "font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition"
+    }
+  >
+    Experiences
+  </NavLink>
 
-          <span className="text-gray-500 cursor-pointer hover:text-gray-900 dark:hover:text-white transition">
-            Services
-          </span>
+  <NavLink
+    to="/services"
+    className={({ isActive }) =>
+      isActive
+        ? "font-semibold text-gray-900 dark:text-white border-b-2 border-black dark:border-white pb-2"
+        : "font-semibold text-gray-500 hover:text-gray-900 dark:hover:text-white transition"
+    }
+  >
+    Services
+  </NavLink>
 
-        </div>
-
-
+</div>
         {/* ================= RIGHT ================= */}
         <div className="flex items-center gap-3">
 

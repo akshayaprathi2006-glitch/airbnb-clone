@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import Navtabs from "../components/Navtabs";
 import PropertyCards from "../components/PropertyCards";
 import axios from "axios";
 import Categories from "../components/Categories";
@@ -13,6 +12,7 @@ const Homepage = () => {
   const [searchText, setSearchText] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const [bookedPropertyIds, setBookedPropertyIds] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [recentProperties, setRecentProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,8 +25,6 @@ const Homepage = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/properties`
         );
-
-        console.log("API RESPONSE:", res.data);
 
         setProperties(res.data?.properties || []);
 
@@ -46,16 +44,50 @@ const Homepage = () => {
     fetchProperties();
   }, []);
 
+  const checkPropertyAvailability = async () => {
+  if (!checkIn || !checkOut) {
+    alert("Please select check-in and check-out dates");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/bookings/check-availability`,
+      {
+        checkIn,
+        checkOut,
+      }
+    );
+
+    setBookedPropertyIds(res.data.bookedPropertyIds || []);
+
+  } catch (error) {
+    console.error("Failed to check availability:", error);
+    alert(
+      error.response?.data?.message ||
+      "Failed to check property availability"
+    );
+  }
+};
+
   // Search properties
   const filteredProperties = (properties || []).filter((property) => {
-    const matchesCategory = true;
+  const matchesCategory =
+    selectedCategory === "All" ||
+    property.category === selectedCategory;
 
-    const matchesSearch = (property?.location || "")
-      .toLowerCase()
-      .includes(searchText.toLowerCase());
+  const search = searchText.toLowerCase().trim();
 
-    return matchesCategory && matchesSearch;
-  });
+  const matchesSearch =
+    (property?.location || "").toLowerCase().includes(search) ||
+    (property?.title || "").toLowerCase().includes(search) ||
+    (property?.description || "").toLowerCase().includes(search);
+
+  const isAvailable =
+    !bookedPropertyIds.includes(property._id);
+
+  return matchesCategory && matchesSearch && isAvailable;
+});
 
   // Remove recently viewed properties from main list
   const sortedProperties = (filteredProperties || []).filter(
@@ -85,7 +117,6 @@ const Homepage = () => {
     return (
       <div className="bg-white dark:bg-gray-950 min-h-screen">
         <Navbar />
-        <Navtabs />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6 md:p-10">
           {[...Array(8)].map((_, index) => (
@@ -108,18 +139,17 @@ const Homepage = () => {
     <div className="bg-white text-black dark:bg-gray-950 dark:text-white min-h-screen">
       <Navbar />
 
-      <Navtabs />
-
-      <SearchFilter
-            searchText={searchText}
-            setSearchText={setSearchText}
-            checkIn={checkIn}
-            setCheckIn={setCheckIn}
-            checkOut={checkOut}
-            setCheckOut={setCheckOut}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-          />
+          <SearchFilter 
+              searchText={searchText}
+              setSearchText={setSearchText}
+              checkIn={checkIn}
+              setCheckIn={setCheckIn}
+              checkOut={checkOut}
+              setCheckOut={setCheckOut}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              checkAvailability={checkPropertyAvailability}
+            />
       <Categories
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}

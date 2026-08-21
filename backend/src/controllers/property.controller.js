@@ -1,5 +1,6 @@
-const uploadToCloudinary = require("../utils/cloudinaryUpload");
+const uploadToCloudinary = require("../utils/cloudinaryUpload"); 
 const Property = require("../models/property.model");
+const Booking = require("../models/booking.model");
 
 const createProperty = async (req, res) => {
   try {
@@ -65,6 +66,71 @@ const getAllProperties = async (req, res) => {
             message: error.message,
         });
     }
+};
+
+const searchProperties = async (req, res) => {
+  try {
+    const { location, checkIn, checkOut, category } = req.query;
+
+    const query = {};
+
+    // Location search
+    if (location) {
+      query.location = {
+        $regex: location,
+        $options: "i",
+      };
+    }
+
+    // Category search
+    if (category && category !== "All") {
+      query.category = category;
+    }
+
+    let properties = await Property.find(query).populate(
+      "host",
+      "name email"
+    );
+
+    // Date availability
+    if (checkIn && checkOut) {
+      const checkInDate = new Date(checkIn);
+      const checkOutDate = new Date(checkOut);
+
+      if (checkOutDate <= checkInDate) {
+        return res.status(400).json({
+          message: "Check-out date must be after check-in date",
+        });
+      }
+
+      const conflictingBookings = await Booking.find({
+        status: "confirmed",
+        checkIn: { $lt: checkOutDate },
+        checkOut: { $gt: checkInDate },
+      }).select("property");
+
+      const bookedPropertyIds = conflictingBookings.map(
+        (booking) => booking.property.toString()
+      );
+
+      properties = properties.filter(
+        (property) =>
+          !bookedPropertyIds.includes(property._id.toString())
+      );
+    }
+
+    return res.status(200).json({
+      message: "Properties searched successfully",
+      properties,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 const getPropertyById = async (req, res) => {
@@ -180,11 +246,12 @@ const getMyProperties = async (req, res) => {
   }
 };
 
-module.exports = {
-  createProperty,
-  getAllProperties,
-  getPropertyById,
-  updateProperty,
-  deleteProperty,
-  getMyProperties,
+module.exports = { 
+  createProperty, 
+  getAllProperties, 
+  searchProperties,
+  getPropertyById, 
+  updateProperty, 
+  deleteProperty, 
+  getMyProperties, 
 };

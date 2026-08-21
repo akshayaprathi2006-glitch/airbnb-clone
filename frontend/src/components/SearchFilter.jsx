@@ -9,6 +9,7 @@ const SearchFilter = ({
   setCheckOut,
   sortBy,
   setSortBy,
+  checkAvailability,
 }) => {
   return (
     <div className="my-8">
@@ -19,6 +20,7 @@ const SearchFilter = ({
         setCheckIn={setCheckIn}
         checkOut={checkOut}
         setCheckOut={setCheckOut}
+        checkAvailability={checkAvailability}
       />
 
       <div className="flex justify-center mt-4">
