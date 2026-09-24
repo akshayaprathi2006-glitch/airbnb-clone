@@ -124,117 +124,120 @@ const Navbar = () => {
             </button>
 
 
-            {/* ================= DROPDOWN ================= */}
-            {menuOpen && (
-              <div className="absolute right-0 top-14 w-64 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl py-2 z-50">
+          {/* ================= DROPDOWN ================= */}
+{menuOpen && (
+  <div className="absolute right-0 top-14 w-60 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 z-50">
 
-                {/* User */}
-                {user && (
-                  <div className="px-5 py-3 border-b border-gray-200 dark:border-gray-700">
+    {/* LOGIN / SIGNUP WHEN USER IS NOT LOGGED IN */}
+    {!user ? (
+      <>
+        <Link
+          to="/signup"
+          onClick={() => setMenuOpen(false)}
+          className="block px-5 py-3 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Sign up
+        </Link>
 
-                    <p className="font-semibold">
-                      {user.name}
-                    </p>
+        <Link
+          to="/login"
+          onClick={() => setMenuOpen(false)}
+          className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Log in
+        </Link>
 
-                    <p className="text-sm text-gray-500 truncate">
-                      {user.email}
-                    </p>
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
-                  </div>
-                )}
+        <Link
+          to="/wishlist"
+          onClick={() => setMenuOpen(false)}
+          className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Wishlist
+        </Link>
+      </>
+    ) : (
+      <>
+        {/* USER INFO */}
+        <div className="px-5 py-3">
+          <p className="font-semibold text-gray-900 dark:text-white">
+            {user.name}
+          </p>
 
+          <p className="text-sm text-gray-500 truncate">
+            {user.email}
+          </p>
+        </div>
 
-                {/* Login */}
-                {!user && (
-                  <Link
-                    to="/login"
-                    onClick={() => setMenuOpen(false)}
-                    className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium"
-                  >
-                    Login
-                  </Link>
-                )}
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
+        {/* USER OPTIONS */}
 
-                {/* Wishlist */}
-                <Link
-                  to="/wishlist"
-                  onClick={() => setMenuOpen(false)}
-                  className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Wishlist
-                </Link>
+        <Link
+          to="/my-bookings"
+          onClick={() => setMenuOpen(false)}
+          className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          My Bookings
+        </Link>
 
+        <Link
+          to="/wishlist"
+          onClick={() => setMenuOpen(false)}
+          className="block px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Wishlist
+        </Link>
 
-                {/* My bookings */}
-                {user && (
-                  <button
-                    onClick={() => {
-                      setMenuOpen(false);
-                      navigate("/my-bookings");
-                    }}
-                    className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    My Bookings
-                  </button>
-                )}
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
+        {/* HOST OPTIONS */}
 
-                {/* Host section */}
-                {user && (
-                  <>
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/add-property");
+          }}
+          className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Become a Host
+        </button>
 
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/host-dashboard");
-                      }}
-                      className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      Host Dashboard
-                    </button>
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/host-dashboard");
+          }}
+          className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Host Dashboard
+        </button>
 
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/host-bookings");
-                      }}
-                      className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      Host Bookings
-                    </button>
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/host-bookings");
+          }}
+          className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+        >
+          Host Bookings
+        </button>
 
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/add-property");
-                      }}
-                      className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      Add Property
-                    </button>
-                  </>
-                )}
+        <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
+        {/* LOGOUT */}
 
-                {/* Logout */}
-                {user && (
-                  <>
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-5 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 text-red-500"
-                    >
-                      Logout
-                    </button>
-                  </>
-                )}
-
-              </div>
-            )}
-
+        <button
+          onClick={handleLogout}
+          className="w-full text-left px-5 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 transition"
+        >
+          Logout
+        </button>
+      </>
+    )}
+  </div>
+)}
           </div>
 
         </div>

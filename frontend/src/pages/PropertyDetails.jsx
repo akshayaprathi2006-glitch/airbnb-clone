@@ -19,6 +19,7 @@ const [showModal, setShowModal] = useState(false);
 const [showLoginModal, setShowLoginModal] = useState(false);
 const [showGallery, setShowGallery] = useState(false);
 const [currentImage, setCurrentImage] = useState(0);
+const [checkingAvailability, setCheckingAvailability] = useState(false);
 useEffect(() => {
   const fetchProperty = async () => {
     try {
@@ -74,6 +75,49 @@ const totalPrice =
   nights > 0
     ? property.price * nights + cleaningFee + serviceFee
     : 0;
+
+
+    const checkPropertyAvailability = async () => {
+  if (!checkIn || !checkOut) {
+    alert("Please select check-in and check-out dates");
+    return false;
+  }
+
+  try {
+    setCheckingAvailability(true);
+
+    const res = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/bookings/check-availability`,
+      {
+        checkIn,
+        checkOut,
+      }
+    );
+
+    const bookedPropertyIds = res.data.bookedPropertyIds || [];
+
+    if (bookedPropertyIds.includes(property._id)) {
+      alert("This property is already booked for the selected dates.");
+      return false;
+    }
+
+    return true;
+
+  } catch (error) {
+    console.error("Availability check failed:", error);
+
+    alert(
+      error.response?.data?.message ||
+      "Failed to check property availability"
+    );
+
+    return false;
+
+  } finally {
+    setCheckingAvailability(false);
+  }
+};
+
 
 
    const handleBooking = async () => {
@@ -287,24 +331,29 @@ const totalPrice =
               </p>
             )}
         <button
-            onClick={() => {
-                    const token = localStorage.getItem("token");
+            onClick={async () => {
+                  const token = localStorage.getItem("token");
 
-                    if (!token) {
-                      setShowLoginModal(true);
-                      return;
-                    }
+                  if (!token) {
+                    setShowLoginModal(true);
+                    return;
+                  }
 
-                    setShowModal(true);
-                  }}
-            disabled={nights <= 0}
+                  const available = await checkPropertyAvailability();
+
+                  if (!available) {
+                    return;
+                  }
+
+                  setShowModal(true);
+                }}
+            disabled={nights <= 0 || checkingAvailability}
             className={`w-full py-3 rounded-xl font-semibold text-white ${
               nights > 0
                 ? "bg-gradient-to-r from-rose-500 to-pink-500 hover:scale-105 transition duration-300"
                 : "bg-gray-400 cursor-not-allowed"
-            }`}
-          >
-            Reserve
+            }`} >
+            {checkingAvailability ? "Checking..." : "Reserve"}
           </button>
        {nights > 0 && (
   <div className="mt-6 border-t pt-4 space-y-2">
