@@ -89,13 +89,8 @@ const Homepage = () => {
   return matchesCategory && matchesSearch && isAvailable;
 });
 
-  // Remove recently viewed properties from main list
-  const sortedProperties = (filteredProperties || []).filter(
-    (property) =>
-      !(recentProperties || []).some(
-        (recent) => recent?._id === property?._id
-      )
-  );
+  // Keep all filtered properties in the main list
+const sortedProperties = [...filteredProperties];
 
   // Sorting
   if (sortBy === "priceLow") {
@@ -162,12 +157,9 @@ const Homepage = () => {
             Recently Viewed
           </h2>
 
-          <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide">
-            {recentProperties.map((property) => (
-              <div
-                key={property._id}
-                className="w-[240px] sm:w-[260px] shrink-0"
-              >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-x-5 gap-y-8">
+                {sortedProperties.map((property) => (
+                  <div key={property._id} className="min-w-0">
                 <PropertyCards
                   id={property._id}
                   image={property.images?.[0]}

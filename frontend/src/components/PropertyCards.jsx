@@ -26,12 +26,15 @@ const PropertyCards = ({
     <div className="group relative">
       <Link to={`/property/${id}`}>
         {/* Image */}
-        <div className="relative overflow-hidden rounded-xl">
-          <img
-            src={image}
-            alt={location}
-            className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+        <div className="relative overflow-hidden rounded-xl aspect-square">
+            <img
+              src={image}
+              alt={location || "Stay"}
+              onError={(e) => {
+                e.currentTarget.style.visibility = "hidden";
+              }}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
 
           {/* Guest favourite badge */}
           {rating >= 4.8 && (
