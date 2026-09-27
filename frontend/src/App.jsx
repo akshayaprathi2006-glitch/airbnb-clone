@@ -14,6 +14,9 @@ import EditProperty from "./pages/EditProperty";
 import Experiences from "./pages/Experiences";
 import Services from "./pages/Services";
 import InfoPage from "./pages/InfoPage";
+import About from "./pages/About";
+import Careers from "./pages/Careers";
+import Contact from "./pages/Contact";
 
 const App = () => {
   return (
@@ -64,12 +67,12 @@ const App = () => {
 
       <Route path="/community" element={<InfoPage />} />
 
-      <Route path="/about" element={<InfoPage />} />
+      <Route path="/about" element={<About />} />
 
-      <Route path="/careers" element={<InfoPage />} />
+      <Route path="/careers" element={<Careers />} />
 
-      <Route path="/contact" element={<InfoPage />} />
-
+      <Route path="/contact" element={<Contact />} />
+      
       <Route path="/privacy" element={<InfoPage />} />
 
       <Route path="/terms" element={<InfoPage />} />
