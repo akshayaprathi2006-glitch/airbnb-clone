@@ -148,24 +148,47 @@ const Homepage = () => {
   }
 
   // --------------------------------------------------
-  // GROUP PROPERTIES BY LOCATION
-  // --------------------------------------------------
+// GROUP PROPERTIES BY LOCATION
+// --------------------------------------------------
 
-  const groupedProperties = sortedProperties.reduce(
-    (groups, property) => {
-      const location =
-        property?.location?.trim() || "Other places";
+const groupedProperties = sortedProperties.reduce(
+  (groups, property) => {
 
-      if (!groups[location]) {
-        groups[location] = [];
-      }
+    const rawLocation =
+      property?.location?.trim() || "Other places";
 
-      groups[location].push(property);
+    // Normalize location for grouping
+    // Example:
+    // Puri
+    // Puri,India
+    // Puri, India
+    // puri
+    // will all become "puri"
 
-      return groups;
-    },
-    {}
-  );
+    const locationKey = rawLocation
+      .split(",")[0]
+      .trim()
+      .toLowerCase();
+
+    // Keep the first property's original location
+    // for displaying the heading
+    const displayLocation =
+      groups[locationKey]?.displayLocation ||
+      rawLocation.split(",")[0].trim();
+
+    if (!groups[locationKey]) {
+      groups[locationKey] = {
+        displayLocation,
+        properties: [],
+      };
+    }
+
+    groups[locationKey].properties.push(property);
+
+    return groups;
+  },
+  {}
+);
 
   // --------------------------------------------------
   // SCROLL SECTION
@@ -247,8 +270,8 @@ const Homepage = () => {
       {Object.keys(groupedProperties).length > 0 ? (
         <div className="mt-10">
           {Object.entries(groupedProperties).map(
-            ([location, locationProperties]) => {
-              const sliderId = `property-slider-${location
+            ([location, group]) => {
+              const sliderId = `property-slider-${group.displayLocation
                 .replace(/\s+/g, "-")
                 .replace(/[^a-zA-Z0-9-_]/g, "")
                 .toLowerCase()}`;
@@ -262,7 +285,7 @@ const Homepage = () => {
                   ---------------------------------- */}
                   <div className="flex items-center justify-between mb-5">
                     <h2 className="text-2xl font-semibold">
-                      Places in {location}
+                      Places in {group.displayLocation}
                     </h2>
                     {/* ARROWS */}
                     <div className="flex gap-2">
@@ -330,7 +353,7 @@ const Homepage = () => {
                       scroll-smooth
                     "
                   >
-                    {locationProperties.map(
+                    {group.properties.map(
                       (property) => (
                         <div
                           key={property._id}
